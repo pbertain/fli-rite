@@ -1,0 +1,10 @@
+# Pull in aviationweather.gov CSV data every 5 mins
+*/30 * * * * root /var/fli-rite/bin/get-avwx-data.sh airsigmet
+*/15 * * * * root /var/fli-rite/bin/get-avwx-data.sh taf
+*/5 * * * *  root /var/fli-rite/bin/get-avwx-data.sh metar
+0 2 * * *    root /var/fli-rite/bin/get-avwx-data.sh station
+
+# Update the Airpuff /usr/local/bin code
+*/15 * * * * root GIT_DIR=/var/fli-rite/.git GIT_WORK_TREE=/var/fli-rite /bin/git pull
+
+
