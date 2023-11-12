@@ -7,7 +7,7 @@ from datetime import datetime
 
 def download_and_uncompress(url, output_filename, output_dir):
 	"""
-	Download, uncompress, and save data from the given URL.
+	Download, uncompress, and save data from the given URL, and create a symlink.
 
 	Parameters:
 	url (str): URL of the file to download.
@@ -19,15 +19,24 @@ def download_and_uncompress(url, output_filename, output_dir):
 
 	# Determine the file extension and insert the timestamp before the extension
 	file_name, file_extension = os.path.splitext(output_filename)
-	output_filename = f"{file_name}{timestamp}{file_extension}"
-	full_path = os.path.join(output_dir, output_filename)
+	output_filename_with_timestamp = f"{file_name}{timestamp}{file_extension}"
+	full_path = os.path.join(output_dir, output_filename_with_timestamp)
 
 	response = requests.get(url, stream=True)
 	if response.status_code == 200:
 		with gzip.open(io.BytesIO(response.content), 'rb') as file_in:
 			with open(full_path, 'wb') as file_out:
 				file_out.write(file_in.read())
+
+		# Create symlink in the directory above
+		symlink_name = f"{file_name}_current{file_extension}"
+		symlink_path = os.path.join(os.path.dirname(output_dir), symlink_name)
+		if os.path.exists(symlink_path):
+			os.remove(symlink_path)
+		os.symlink(full_path, symlink_path)
+
 		print(f'Data saved to {full_path}')
+		print(f'Symlink created at {symlink_path}')
 	else:
 		print(f'Error: Unable to download data from {url}')
 
