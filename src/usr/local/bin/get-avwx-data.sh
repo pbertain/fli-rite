@@ -4,7 +4,7 @@ TYPE="$1"
 
 PYTHON="/usr/bin/python3"
 DIR_MAIN="/var/fli-rite"
-DIR_BIN="${DIR_MAIN}/bin"
+DIR_BIN="/usr/local/bin"
 DIR_DATA="${DIR_MAIN}/data"
 SCRIPT="get-avwx-data.py"
 AVWX_TYPE=`echo ${1} | tr '[:upper:]' '[:lower:]'`
